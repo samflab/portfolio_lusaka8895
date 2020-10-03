@@ -1,5 +1,7 @@
 <?php
 
+require  __DIR__ .'/util/email.php';
+
 //Retrieve form data. 
 //GET - user submitted data using AJAX
 //POST - in case user does not support javascript, we'll use POST instead
@@ -31,7 +33,7 @@ if (!$errors) {
 		       Message: ' . nl2br($comment) . '<br/>';
 
 	//send the mail
-	$result = sendmail($to, $subject, $message, $from);
+	$result = EmailHelper::send($to, $subject, $message, $from);
 	
 	//if POST was used, display the message straight away
 	if ($_POST) {
@@ -52,18 +54,3 @@ if (!$errors) {
 	echo '<a href="index.html">Back</a>';
 	exit;
 }
-
-
-//Simple mail function with HTML header
-function sendmail($to, $subject, $message, $from) {
-	$headers = "MIME-Version: 1.0" . "\r\n";
-	$headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
-	$headers .= 'From: ' . $from . "\r\n";
-	
-	$result = mail($to,$subject,$message,$headers);
-	
-	if ($result) return 1;
-	else return 0;
-}
-
-?>
